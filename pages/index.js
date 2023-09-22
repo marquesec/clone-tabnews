@@ -2,7 +2,7 @@ function Home() {
   return (
     <h1>
       <i>
-        Boas vindas da aplicação :/ 27/07/2023<b>:O</b>
+        Boas vindas da aplicação :/ 22/09/2023<b>:O</b>
       </i>
     </h1>
   );
