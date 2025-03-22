@@ -9,16 +9,24 @@ export default [
     },
     rules: {
       ...nextPlugin.configs.recommended.rules,
-      //"eslint:recommended",
-      //"plugin:jest/recommended",
-      //"next/core-web-vitals"
+      // "eslint:recommended",  // No need to include this; it's already in js.configs.recommended.
+      // "plugin:jest/recommended", //  Requires installing eslint-plugin-jest and configuring test file patterns.
+      // "next/core-web-vitals"    //  Covered by nextPlugin.configs.recommended.rules
     },
   },
   {
     files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
-    ignores: ["**/*.config.js"], // Substitua pelo seu .eslintignore
+    ignores: ["**/*.config.js"], //  Make sure this matches your .eslintignore or desired ignored files.
     linterOptions: {
       reportUnusedDisableDirectives: "warn",
     },
   },
+    If you want to add Jest support, include this:
+   {
+     plugins: {
+       jest: require('eslint-plugin-jest'),
+     },
+     extends: ['plugin:jest/recommended'],
+     files: ["**/*.spec.js", "**/*.test.js"], // Adjust the file pattern for your test files
+   },
 ];
