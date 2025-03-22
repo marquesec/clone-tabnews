@@ -5,7 +5,7 @@ beforeAll(async () => {
   await orchestrator.waitForAllServices();
   await orchestrator.clearDatabase();
   await orchestrator.waitForAllServices();
-}, 80000);
+}, 10000);
 
 describe("POST /api/v1/migrations", () => {
   describe("Anonymous user", () => {

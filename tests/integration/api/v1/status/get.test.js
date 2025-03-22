@@ -1,11 +1,11 @@
 import { jest } from "@jest/globals";
 import orchestrator from "../../../../../tests/orchestrator";
 
-beforeAll(async () => {
+beforeEach(async () => {
   await orchestrator.waitForAllServices();
   await orchestrator.clearDatabase();
   await orchestrator.waitForAllServices();
-}, 80000);
+}, 10000);
 
 test("GET to /api/v1/status should return 200", async () => {
   const response = await fetch("http://localhost:3000/api/v1/status");
