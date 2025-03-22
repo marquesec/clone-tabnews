@@ -11,7 +11,7 @@ const customJestConfig = {
   testEnvironment: "jsdom", // Ambiente de teste para componentes web
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"], // Arquivo de setup
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1", // Mapeamento de aliases (se usar TypeScript/JavaScript com aliases)
+    "^@/(.*)$": "<rootDir>/src/$1", // Mapeamento de aliases (se usar TypeScript/JavaScript com aliases
   },
   testPathIgnorePatterns: ["/node_modules/", "/.next/"], // Ignorar pastas
   transform: {
@@ -32,4 +32,6 @@ export default createJestConfig({
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
   },
+  // Remova a definição duplicada de moduleDirectories aqui
+  // moduleDirectories: ['node_modules', '<rootDir>'],
 });
