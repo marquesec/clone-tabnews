@@ -8,30 +8,18 @@ const createJestConfig = nextJest({
 
 // 2. Configurações personalizadas do Jest
 const customJestConfig = {
-  testEnvironment: "jsdom", // Ambiente de teste para componentes web
+  testEnvironment: "jest-environment-jsdom", // Ambiente de teste para componentes web (nome completo)
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"], // Arquivo de setup
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1", // Mapeamento de aliases (se usar TypeScript/JavaScript com aliases
+    "^@/(.*)$": "<rootDir>/src/$1", // Mapeamento de aliases (ex.: @/components)
   },
   testPathIgnorePatterns: ["/node_modules/", "/.next/"], // Ignorar pastas
   transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }], // Configuração do Babel
+    "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }], // Transformação com Babel e preset do Next.js
   },
   moduleDirectories: ["node_modules", "<rootDir>"], // Diretórios para resolver módulos
-  testTimeout: 60000, // Tempo limite dos testes
+  testTimeout: 60000, // Tempo limite dos testes (60 segundos)
 };
 
 // 3. Exportar a configuração combinada
-export default createJestConfig({
-  testEnvironment: "jest-environment-jsdom", // Nome completo do pacote
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-  moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
-  },
-  testPathIgnorePatterns: ["/node_modules/", "/.next/"],
-  transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
-  },
-  // Remova a definição duplicada de moduleDirectories aqui
-  // moduleDirectories: ['node_modules', '<rootDir>'],
-});
+export default createJestConfig(customJestConfig);
