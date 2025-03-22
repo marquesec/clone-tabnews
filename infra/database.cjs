@@ -1,4 +1,4 @@
-import { Client } from "pg";
+const { Client } = require("pg");
 
 async function query(queryObject) {
   let client;
@@ -10,7 +10,9 @@ async function query(queryObject) {
     console.error(error);
     throw error;
   } finally {
-    await client.end();
+    if (client) {
+      await client.end();
+    }
   }
 }
 
@@ -28,7 +30,7 @@ async function getNewClient() {
   return client;
 }
 
-export default {
+module.exports = {
   query,
   getNewClient,
 };
