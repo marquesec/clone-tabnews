@@ -11,7 +11,7 @@
     "services:down": "docker compose -f infra/compose.yaml down",
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
-    "lint:eslint:check": "next lint --dir .",
+    "lint:eslint:check": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' next lint --dir .",
     "test": "npm run services:up && concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"NODE_OPTIONS=--experimental-vm-modules npx jest --config=jest.config.mjs --runInBand --verbose --detectOpenHandles --forceExit\"",
     "test:watch": "jest --watchAll --runInBand",
     "migration:create": "node-pg-migrate -m infra/migrations create",
