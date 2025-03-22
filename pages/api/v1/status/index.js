@@ -8,7 +8,7 @@ async function status(request, response) {
   console.log(databaseVersionResult);
 
   const databaseMaxConnectionsResult = await database.query(
-    "SHOW max_connections;",
+    "SHOW max_connections;"
   );
 
   const databaseMaxConnectionsValue =
