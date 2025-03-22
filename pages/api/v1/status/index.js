@@ -1,7 +1,6 @@
 import database from "infra/database";
 
 async function status(request, response) {
-  let variavelEsquecida;
   const updatedAt = new Date().toISOString();
 
   const databaseVersionResult = await database.query("SHOW server_version;");
@@ -9,7 +8,7 @@ async function status(request, response) {
   console.log(databaseVersionResult);
 
   const databaseMaxConnectionsResult = await database.query(
-    "SHOW max_connections;"
+    "SHOW max_connections;",
   );
 
   const databaseMaxConnectionsValue =
