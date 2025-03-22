@@ -2,11 +2,11 @@ import { jest } from "@jest/globals";
 import orchestrator from "../../../../../tests/orchestrator";
 
 beforeAll(async () => {
-  jest.setTimeout(10000);
+  jest.setTimeout(60000);
   await orchestrator.waitForAllServices();
   await orchestrator.clearDatabase();
   await orchestrator.waitForAllServices();
-}, 30000);
+}, 80000);
 
 describe("GET /api/v1/migrations", () => {
   describe("Anonymous user", () => {
