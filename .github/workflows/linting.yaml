@@ -58,4 +58,4 @@ jobs:
 
       - run: npm ci
 
-      - run: npx --no-install lint-staged
+      - run: npx secretlint "**/*"
