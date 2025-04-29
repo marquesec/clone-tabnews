@@ -1,0 +1,50 @@
+#!/bin/sh
+
+echo "🔍 Verificando por chaves sensíveis..."
+
+FILES=$(git diff --cached --name-only --diff-filter=ACM)
+abort=false
+
+for file in $FILES; do
+    # Ignora o próprio hook
+    if [ "$file" = ".husky/pre-commit" ]; then
+        continue
+    fi
+
+    if grep -q -E -- "-----BEGIN PRIVATE KEY-----" "$file"; then
+        echo "🚫 Chave privada detectada em $file"
+        abort=true
+    fi
+
+    if grep -q -E -- "AKIA[0-9A-Z]{16}" "$file"; then
+        echo "🚫 AWS Key detectada em $file"
+        abort=true
+    fi
+
+    if grep -q -E -- "AIza[0-9A-Za-z\-_]{35}" "$file"; then
+        echo "🚫 Google API Key detectada em $file"
+        abort=true
+    fi
+
+    if grep -q -E -- "ssh-rsa AAAA[0-9A-Za-z+/]+[=]{0,3}" "$file"; then
+        echo "🚫 SSH Key detectada em $file"
+        abort=true
+    fi
+
+    if grep -q -E -- "ghp_[A-Za-z0-9]{36}" "$file"; then
+        echo "🚫 GitHub Token detectado em $file"
+        abort=true
+    fi
+
+    if grep -q -E -- "eyJ[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+" "$file"; then
+        echo "🚫 JWT Token detectado em $file"
+        abort=true
+    fi
+done
+
+if [ "$abort" = true ]; then
+    echo "❌ Commit cancelado. Remova as chaves privadas antes de commitar."
+    exit 1
+fi
+
+echo "✅ Nenhuma chave sensível encontrada. Continuando o commit..."
