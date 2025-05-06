@@ -1,7 +1,0 @@
-Este arquivo contém uma possível chave de API do GitHub: ghp_XXF5SXXXXXXXXXXXXXXXXXX
-Por favor, remova esta chave antes de commitar!
-
-Minha chave secreta da AWS é AKIAIOSFODNN7EXAMPLE
-
-Segredo do Stripe (chave secreta): sk_test_XXGD5XXXXXXXXXXXXXXXXXXXXX
-Segredo do Stripe (chave pública): pk_test_HDGRETXJSHTXXXXXXXXXXXXXXXX
