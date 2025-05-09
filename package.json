@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Projeto para treinar programação AM;",
   "main": "index.js",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
   "scripts": {
     "dev": "npm run services:up && npm run services:wait:database && npm run migrations:up && next dev",
     "test": "npm run services:up && concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand --verbose\"",
