@@ -9,9 +9,9 @@ async function fetchAPI(key) {
 export default function StatusPage() {
   return (
     <>
-      <h1 style={{ color: "brown" }}>Status</h1>
+      <h1>Status</h1>
       <UpdatedAt />
-      <DatabaseInfo />
+      <DatabaseStatus />
     </>
   );
 }
@@ -30,26 +30,31 @@ function UpdatedAt() {
   return <div>Última atualização: {updatedAtText}</div>;
 }
 
-function DatabaseInfo() {
+function DatabaseStatus() {
   const { isLoading, data } = useSWR("/api/v1/status", fetchAPI, {
     refreshInterval: 2000,
   });
 
-  let version = "..";
-  let maxConnections = "-";
-  let openedConnections = "-";
+  let databaseStatusInformation = "Carregando...";
 
   if (!isLoading && data) {
-    version = data.dependencies.database.version;
-    maxConnections = data.dependencies.database.max_connections;
-    openedConnections = data.dependencies.database.opened_connections;
-  }
+    databaseStatusInformation = (
+      <>
+        <div>Versão: {data.dependencies.database.version}</div>
+        <div>
+          Conexões abertas: {data.dependencies.database.opened_connections}
+        </div>
+        <div>
+          Conexões máximas: {data.dependencies.database.max_connections}
+        </div>
+      </>
+    );
 
-  return (
-    <div>
-      <p>Version: {version}</p>
-      <p>Max connections : {maxConnections}</p>
-      <p>Opened Connections : {openedConnections}</p>
-    </div>
-  );
+    return (
+      <>
+        <h2>Database</h2>
+        <div>{databaseStatusInformation}</div>
+      </>
+    );
+  }
 }
