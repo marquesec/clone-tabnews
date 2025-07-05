@@ -2,7 +2,7 @@ import orchestrator from "tests/orchestrator.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
-});
+}, 180 * 1000);
 
 describe("POST /api/v1/status", () => {
   describe("Anonymous user", () => {
