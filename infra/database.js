@@ -27,7 +27,7 @@ async function getNewClient() {
     password: process.env.POSTGRES_PASSWORD,
     ssl: getSSLValues(),
   });
-  //Adicionado novo password na Vercel 06/07
+  //Adicionado novo password na Vercel 06/07 - Agora mudei tb no neon
 
   await client.connect();
   return client;
