@@ -27,6 +27,7 @@ async function getNewClient() {
     password: process.env.POSTGRES_PASSWORD,
     ssl: getSSLValues(),
   });
+  //Adicionado novo password na Vercel 06/07
 
   await client.connect();
   return client;
