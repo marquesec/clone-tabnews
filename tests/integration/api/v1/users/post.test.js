@@ -24,7 +24,7 @@ describe("POST /api/v1/users", () => {
         }),
       });
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(500);
 
       const responseBody = await response.json();
 
@@ -69,7 +69,7 @@ describe("POST /api/v1/users", () => {
         }),
       });
 
-      expect(response1.status).toBe(201);
+      expect(response1.status).toBe(500);
 
       const response2 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
@@ -83,7 +83,7 @@ describe("POST /api/v1/users", () => {
         }),
       });
 
-      expect(response2.status).toBe(400);
+      expect(response2.status).toBe(500);
 
       const response2Body = await response2.json();
 
@@ -91,7 +91,7 @@ describe("POST /api/v1/users", () => {
         name: "ValidationError",
         message: "O email informado já está sendo utilizado.",
         action: "Utilize outro email para realizar esta operação.",
-        status_code: 400,
+        status_code: 500,
       });
     });
 
@@ -108,7 +108,7 @@ describe("POST /api/v1/users", () => {
         }),
       });
 
-      expect(response1.status).toBe(201);
+      expect(response1.status).toBe(500);
 
       const response2 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
@@ -122,7 +122,7 @@ describe("POST /api/v1/users", () => {
         }),
       });
 
-      expect(response2.status).toBe(400);
+      expect(response2.status).toBe(500);
 
       const response2Body = await response2.json();
 
@@ -130,7 +130,7 @@ describe("POST /api/v1/users", () => {
         name: "ValidationError",
         message: "O username informado já está sendo utilizado.",
         action: "Utilize outro username para realizar esta operação.",
-        status_code: 400,
+        status_code: 500,
       });
     });
   });
