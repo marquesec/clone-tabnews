@@ -67,7 +67,6 @@ async function findOneByEmail(email) {
 async function create(userInputValues) {
   await validateUniqueUsername(userInputValues.username);
   await validateUniqueEmail(userInputValues.email);
-  await hashPasswordInObject(userInputValues);
 
   const newUser = await runInsertQuery(userInputValues);
   return newUser;
@@ -179,11 +178,6 @@ async function validateUniqueEmail(email) {
       action: "Utilize outro email para realizar esta operação.",
     });
   }
-}
-
-async function hashPasswordInObject(userInputValues) {
-  const hashedPassword = await password.hash(userInputValues.password);
-  userInputValues.password = hashedPassword;
 }
 
 const user = {
