@@ -39,11 +39,6 @@ describe("POST /api/v1/users", () => {
       expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
-
-      const userInDatabase = await user.findOneByUsername(
-        "filipedeschamps",
-        "senha123",
-      );
     });
 
     test("With duplicated 'email'", async () => {
