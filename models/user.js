@@ -121,9 +121,7 @@ async function create(userInputValues) {
     });
     return results.rows[0];
   }
-}
-
-async function update(username, userInputValues) {
+} e, userInputValues) {
   const currentUser = await findOneByUsername(username);
 
   if ("username" in userInputValues) {
