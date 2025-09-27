@@ -22,7 +22,7 @@ async function postHandler(request, response) {
 
   controller.setSessionCookie(newSession.token, response);
 
-  return response.status().json(newSession);
+  return response.status(201).json(newSession);
 }
 
 async function deleteHandler(request, response) {
