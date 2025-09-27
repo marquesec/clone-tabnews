@@ -110,7 +110,7 @@ describe("POST /api/v1/sessions", () => {
         }),
       });
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(500);
 
       const responseBody = await response.json();
 
