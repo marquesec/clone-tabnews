@@ -5,7 +5,7 @@ import password from "models/password.js";
 
 beforeAll(async () => {
   // CORREÇÃO: Linha removida para resolver o problema de timeout no Jest (30000ms).
-  // await orchestrator.waitForAllServices(); 
+  // await orchestrator.waitForAllServices();
   await orchestrator.clearDatabase();
   await orchestrator.runPendingMigrations();
 });
