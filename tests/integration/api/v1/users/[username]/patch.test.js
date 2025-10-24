@@ -14,7 +14,6 @@ import password from "models/password.js";
 //   await orchestrator.runPendingMigrations();
 // });
 
-
 beforeEach(async () => {
   // Limpamos e migramos o banco de dados ANTES DE CADA TESTE.
   // Isso garante que os testes de duplicação e unicidade funcionem
