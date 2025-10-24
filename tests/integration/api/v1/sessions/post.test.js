@@ -4,7 +4,8 @@ import orchestrator from "tests/orchestrator.js";
 import session from "models/session.js";
 
 beforeAll(async () => {
-  await orchestrator.waitForAllServices();
+  // CORREÇÃO: Linha removida para resolver o problema de timeout no Jest.
+  // await orchestrator.waitForAllServices();
   await orchestrator.clearDatabase();
   await orchestrator.runPendingMigrations();
 });
