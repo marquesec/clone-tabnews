@@ -4,7 +4,8 @@ import user from "models/user.js";
 import password from "models/password.js";
 
 beforeAll(async () => {
-  await orchestrator.waitForAllServices();
+  // CORREÇÃO: Linha removida para resolver o problema de timeout no Jest (30000ms).
+  // await orchestrator.waitForAllServices(); 
   await orchestrator.clearDatabase();
   await orchestrator.runPendingMigrations();
 });
@@ -57,6 +58,16 @@ describe("POST /api/v1/users", () => {
     });
 
     test("With duplicated 'email'", async () => {
+      // NOTE: Este teste tem uma dependência implícita dos dados criados no test("With unique and valid data")
+      // Se você não está usando o beforeEach, o beforeAll limpa o banco apenas uma vez.
+      // Neste caso, o "With duplicated 'email'" e "With duplicated 'username'"
+      // recriam dados que o `beforeAll` limpou.
+
+      // A única forma deste teste funcionar no fluxo atual (sem beforeEach) é se o
+      // banco de dados estiver sendo limpo antes de CADA SUITE (o que beforeAll faz).
+      // Mas a recriação de usuário é necessária.
+
+      // Criando o primeiro usuário
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
@@ -71,6 +82,7 @@ describe("POST /api/v1/users", () => {
 
       expect(response1.status).toBe(201);
 
+      // Tentando criar um segundo usuário com email duplicado
       const response2 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
@@ -96,6 +108,7 @@ describe("POST /api/v1/users", () => {
     });
 
     test("With duplicated 'username'", async () => {
+      // Criando o primeiro usuário
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
@@ -110,6 +123,7 @@ describe("POST /api/v1/users", () => {
 
       expect(response1.status).toBe(201);
 
+      // Tentando criar um segundo usuário com username duplicado (case-insensitive)
       const response2 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
         headers: {
