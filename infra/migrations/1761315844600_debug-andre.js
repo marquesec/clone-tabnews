@@ -4,15 +4,15 @@
 exports.shorthands = undefined;
 
 /**
- 
  * @param run {() => void | undefined}
  * @returns {Promise<void> | void}
  */
-exports.up = (pgm) => {};
+// CORREÇÃO: Removendo o argumento 'pgm' completamente se ele não for usado.
+exports.up = () => {};
 
 /**
-
  * @param run {() => void | undefined}
  * @returns {Promise<void> | void}
  */
-exports.down = (pgm) => {};
+// CORREÇÃO: Removendo o argumento 'pgm' completamente se ele não for usado.
+exports.down = () => {};
