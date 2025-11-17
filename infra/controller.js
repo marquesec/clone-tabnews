@@ -29,11 +29,24 @@ function onErrorHandler(error, request, response) {
   response.status(publicErrorObject.statusCode).json(publicErrorObject);
 }
 
+function setSessionCookie(token, response) {
+  response.setHeader(
+    "Set-Cookie",
+    `session_id=${token}; Path=/; HttpOnly; Max-Age=${60 * 60 * 24 * 30}`,
+  );
+}
+
+function clearSessionCookie(response) {
+  response.setHeader("Set-Cookie", "session_id=; Path=/; HttpOnly; Max-Age=0");
+}
+
 const controller = {
   errorHandlers: {
     onNoMatch: onNoMatchHandler,
     onError: onErrorHandler,
   },
+  setSessionCookie,
+  clearSessionCookie,
 };
 
 export default controller;

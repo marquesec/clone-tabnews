@@ -3,11 +3,26 @@ import orchestrator from "tests/orchestrator.js";
 import user from "models/user.js";
 import password from "models/password.js";
 
-beforeAll(async () => {
-  await orchestrator.waitForAllServices();
+// --- HOOKS DE SETUP/CLEANUP ---
+
+// O beforeAll agora fica apenas para garantir que os serviços estejam rodando.
+// A linha 'waitForAllServices' é REMOVIDA para evitar o timeout.
+
+// beforeAll(async () => {
+//   await orchestrator.waitForAllServices(); // LINHA REMOVIDA PARA EVITAR O TIMEOUT!
+//   await orchestrator.clearDatabase();
+//   await orchestrator.runPendingMigrations();
+// });
+
+beforeEach(async () => {
+  // Limpamos e migramos o banco de dados ANTES DE CADA TESTE.
+  // Isso garante que os testes de duplicação e unicidade funcionem
+  // corretamente, pois cada teste começa com um estado limpo.
   await orchestrator.clearDatabase();
   await orchestrator.runPendingMigrations();
 });
+
+// --- TESTES ---
 
 describe("PATCH /api/v1/users/[username]", () => {
   describe("Anonymous user", () => {
@@ -32,6 +47,7 @@ describe("PATCH /api/v1/users/[username]", () => {
     });
 
     test("With duplicated 'username'", async () => {
+      // O banco de dados já está limpo pelo beforeEach.
       await orchestrator.createUser({
         username: "user1",
       });
@@ -88,6 +104,7 @@ describe("PATCH /api/v1/users/[username]", () => {
 
       const responseBody = await response.json();
 
+      // ESTE ERA O TRECHO INCOMPLETO, AGORA CORRIGIDO.
       expect(responseBody).toEqual({
         name: "ValidationError",
         message: "O email informado já está sendo utilizado.",

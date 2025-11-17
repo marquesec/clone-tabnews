@@ -1,5 +1,13 @@
+// jsconfig.json (Na raiz do projeto)
 {
   "compilerOptions": {
-    "baseUrl": "."
-  }
+    "baseUrl": ".", // Define a raiz do projeto como base para módulos
+    "paths": {
+      // Cria um alias para o diretório 'models'
+      "models": ["models/index.js"], // Se o arquivo for models/index.js
+      // OU
+      "models": ["models"] // Se for um diretório com um index.js
+    }
+  },
+  "include": ["**/*.js", "**/*.jsx"]
 }
