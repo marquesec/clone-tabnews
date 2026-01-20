@@ -1,15 +1,11 @@
-name: Automated Tests
-
-on: pull_request
-
-jobs:
-  jest:
-    name: Jest Ubuntu
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-      - run: npm test
+steps:
+  - uses: actions/checkout@v4
+  - uses: actions/setup-node@v4
+    with:
+      node-version: 20
+  - run: npm ci
+  # Garante que o banco está pronto para os testes de usuário
+  - run: npm run services:up
+  - run: npm run services:wait:database
+  - run: npm run migrations:up
+  - run: npm test
