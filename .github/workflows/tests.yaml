@@ -1,18 +1,33 @@
 name: Automated Tests
-
-on: pull_request
+on:
+  push:
+    branches: [main, user-endpoint]
+  pull_request:
+    branches: [main, user-endpoint]
 
 jobs:
-  jest:
+  jest-tests:
     name: Jest Ubuntu
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: "lts/hydrogen"
+          node-version: 20
 
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-      - run: npm test
+      - name: Run Services
+        run: npm run services:up
+
+      - name: Wait for Database
+        run: npm run services:wait:database
+
+      - name: Run Migrations
+        run: npm run migrations:up
+
+      - name: Run Tests
+        run: npm test
