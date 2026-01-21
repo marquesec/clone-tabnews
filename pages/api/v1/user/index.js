@@ -12,28 +12,40 @@ export default router.handler(controller.errorHandlers);
 async function getHandler(request, response) {
   const sessionToken = request.cookies.session_id;
 
-  // 1. Tenta buscar a sessão
-  const sessionObject = await session.findOneValidByToken(sessionToken);
-
-  // 2. Se a sessão não for encontrada ou for inválida, limpa o cookie (correção para o teste)
-  if (!sessionObject) {
-    response.setHeader(
-      "Set-Cookie",
-      "session_id=invalid; HttpOnly; Max-Age=-1; Path=/",
-    );
-    return response.status(401).end();
+  // Se nem tem token, já limpa o cookie e sai fora
+  if (!sessionToken) {
+    return clearCookieAndFail(response);
   }
 
-  // 3. Se chegou aqui, a sessão é válida, então renovamos
-  const renewedSessionObject = await session.renew(sessionObject.id);
-  controller.setSessionCookie(renewedSessionObject.token, response);
+  try {
+    const sessionObject = await session.findOneValidByToken(sessionToken);
 
-  const userFound = await user.findOneById(sessionObject.user_id);
+    // Se a sessão não for válida ou não existir
+    if (!sessionObject || !sessionObject.id) {
+      return clearCookieAndFail(response);
+    }
 
+    const renewedSessionObject = await session.renew(sessionObject.id);
+    controller.setSessionCookie(renewedSessionObject.token, response);
+
+    const userFound = await user.findOneById(sessionObject.user_id);
+
+    response.setHeader(
+      "Cache-Control",
+      "no-store, no-cache, max-age=0, must-revalidate",
+    );
+
+    return response.status(200).json(userFound);
+  } catch (error) {
+    // Se der qualquer erro na busca da sessão, limpa o cookie por segurança
+    return clearCookieAndFail(response);
+  }
+}
+
+function clearCookieAndFail(response) {
   response.setHeader(
-    "Cache-Control",
-    "no-store, no-cache, max-age=0, must-revalidate",
+    "Set-Cookie",
+    "session_id=invalid; HttpOnly; Max-Age=-1; Path=/",
   );
-
-  return response.status(200).json(userFound);
+  return response.status(401).end();
 }
