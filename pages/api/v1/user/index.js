@@ -48,11 +48,10 @@ function clearCookieAndFail(response) {
     "session_id=invalid; HttpOnly; Max-Age=-1; Path=/",
   );
 
-  // O teste espera esse corpo JSON específico para passar da linha 149 e 193
   return response.status(401).json({
     name: "UnauthorizedError",
-    message: "Usuário não autenticado.",
-    action: "Verifique se você está logado.",
-    statusCode: 401,
+    message: "Usuário não possui sessão ativa.",
+    action: "Verifique se este usuário está logado e tente novamente.",
+    status_code: 401,
   });
 }
