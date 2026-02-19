@@ -1,10 +1,10 @@
-//import { version as uuidVersion } from "uuid";
+import { version as uuidVersion } from "uuid";
 import setCookieParser from "set-cookie-parser";
 import orchestrator from "tests/orchestrator.js";
 import session from "models/session.js";
 
 beforeAll(async () => {
-  // A linha 'waitForAllServices' foi removida para evitar o timeout.
+  await orchestrator.waitForAllServices();
   await orchestrator.clearDatabase();
   await orchestrator.runPendingMigrations();
 });
@@ -80,30 +80,43 @@ describe("DELETE /api/v1/sessions", () => {
 
       const responseBody = await response.json();
 
-      // Ajustado para esperar a mensagem de sucesso
       expect(responseBody).toEqual({
-        message: "Sessão encerrada com sucesso.",
+        id: sessionObject.id,
+        token: sessionObject.token,
+        user_id: sessionObject.user_id,
+        expires_at: responseBody.expires_at,
+        created_at: responseBody.created_at,
+        updated_at: responseBody.updated_at,
       });
+
+      expect(uuidVersion(responseBody.id)).toBe(4);
+      expect(Date.parse(responseBody.expires_at)).not.toBeNaN();
+      expect(Date.parse(responseBody.created_at)).not.toBeNaN();
+      expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
+
+      expect(
+        responseBody.expires_at < sessionObject.expires_at.toISOString(),
+      ).toBe(true);
+      expect(
+        responseBody.updated_at > sessionObject.updated_at.toISOString(),
+      ).toBe(true);
 
       // Set-Cookie assertions
       const parsedSetCookie = setCookieParser(response, {
         map: true,
       });
 
-      // Ajustando as expectativas do Set-Cookie
       expect(parsedSetCookie.session_id).toEqual({
         name: "session_id",
-        value: "", // Corrigido: espere uma string vazia
-        maxAge: 0,
-        // A linha "expires" foi removida
-        httpOnly: true,
+        value: "invalid",
+        maxAge: -1,
         path: "/",
+        httpOnly: true,
       });
 
-      // Double check assertions: Verifica se a sessão realmente foi invalidada
+      // Double check assertions
       const doubleCheckResponse = await fetch(
-        // CORREÇÃO FINAL: Altera /api/v1/user para /api/v1/users/me
-        "http://localhost:3000/api/v1/users/me",
+        "http://localhost:3000/api/v1/user",
         {
           headers: {
             Cookie: `session_id=${sessionObject.token}`,
@@ -111,7 +124,6 @@ describe("DELETE /api/v1/sessions", () => {
         },
       );
 
-      // O teste espera 401, indicando que o usuário não está mais logado.
       expect(doubleCheckResponse.status).toBe(401);
 
       const doubleCheckResponseBody = await doubleCheckResponse.json();
